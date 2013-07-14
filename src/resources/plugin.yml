@@ -1,0 +1,7 @@
+name: Controllable Mobs API test plugin
+main: de.ntcomputer.minecraft.cmapitest.CMAPITestPlugin
+version: {project.version}
+depend: [ControllableMobsAPI]
+commands:
+  cmapi:
+  
