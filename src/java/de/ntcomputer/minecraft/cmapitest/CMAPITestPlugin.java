@@ -47,7 +47,7 @@ public final class CMAPITestPlugin extends JavaPlugin {
 			Skeleton skeleton = (Skeleton) entity;
 			skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW,1));
 		}
-		ControllableMob<?> controllableEntity = ControllableMobs.assign(entity);
+		ControllableMob<?> controllableEntity = ControllableMobs.putUnderControl(entity);
 		
 		if(args[0].equalsIgnoreCase("move1")) {
 			controllableEntity.getAI().clear();
