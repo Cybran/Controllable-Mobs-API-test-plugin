@@ -1,7 +1,9 @@
 name: Controllable Mobs API test plugin
 main: de.ntcomputer.minecraft.cmapitest.CMAPITestPlugin
-version: {project.version}
+version: ${version}
 depend: [ControllableMobsAPI]
+author: DevCybran
+website: http://dev.bukkit.org/bukkit-plugins/controllable-mobs-api/
 commands:
   cmapi:
   

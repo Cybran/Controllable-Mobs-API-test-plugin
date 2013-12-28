@@ -17,6 +17,7 @@ import de.ntcomputer.minecraft.controllablemobs.api.ControllableMob;
 import de.ntcomputer.minecraft.controllablemobs.api.ControllableMobs;
 import de.ntcomputer.minecraft.controllablemobs.api.ai.AIType;
 import de.ntcomputer.minecraft.controllablemobs.api.ai.behaviors.AIAttackMelee;
+import de.ntcomputer.minecraft.controllablemobs.api.ai.behaviors.AIDoorOpen;
 import de.ntcomputer.minecraft.controllablemobs.api.ai.behaviors.AITargetNearest;
 import de.ntcomputer.minecraft.controllablemobs.api.attributes.AttributeModifier;
 import de.ntcomputer.minecraft.controllablemobs.api.attributes.AttributeModifierFactory;
@@ -47,7 +48,15 @@ public final class CMAPITestPlugin extends JavaPlugin {
 			Skeleton skeleton = (Skeleton) entity;
 			skeleton.getEquipment().setItemInHand(new ItemStack(Material.BOW,1));
 		}
-		ControllableMob<?> controllableEntity = ControllableMobs.putUnderControl(entity);
+		final ControllableMob<?> controllableEntity = ControllableMobs.putUnderControl(entity);
+		
+		if(args[0].equalsIgnoreCase("attackmove")) {
+			controllableEntity.getAI().clear();
+			((ControllableMob<? extends Creature>) controllableEntity).getAI().addBehavior(new AIAttackMelee());
+			controllableEntity.getAI().addBehavior( new AITargetNearest(0, 16.0, true, 60, null, Player.class) );
+			controllableEntity.getActions().moveToAttacking(controllableEntity.getEntity().getLocation().add(20,0,0), true, 16.0D, 1.5D);
+			controllableEntity.getActions().die(true);
+		}
 		
 		if(args[0].equalsIgnoreCase("move1")) {
 			controllableEntity.getAI().clear();
@@ -56,7 +65,9 @@ public final class CMAPITestPlugin extends JavaPlugin {
 		}
 		
 		if(args[0].equalsIgnoreCase("follow")) {
-			//controllableEntity.getAI().clear();
+			controllableEntity.getAI().clear();
+			controllableEntity.getAI().addBehavior(new AIDoorOpen(0, true));
+			//controllableEntity.getAI().addBehavior(new AIDoorBreak());
 			controllableEntity.getActions().follow(player);
 		}
 		
@@ -107,6 +118,17 @@ public final class CMAPITestPlugin extends JavaPlugin {
 		
 		if(args[0].equalsIgnoreCase("jump")) {
 			controllableEntity.getActions().jump(10);
+		}
+		
+		if(args[0].equals("random")) {
+			Runnable randomRun = new Runnable() {
+				@Override
+				public void run() {
+					controllableEntity.getActions().moveTo(controllableEntity.getEntity().getLocation().add(Math.random()*5-2.5, 0, Math.random()*5-2.5));
+					controllableEntity.getActions().callback(this);
+				}
+			};
+			randomRun.run();
 		}
 		
 		return false;
